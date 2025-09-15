@@ -1,0 +1,62 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+.venv/
+env/
+ENV/
+env.bak/
+
+# Django / Python stuff
+db.sqlite3
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Media / static generated
+/media/
+staticfiles/
+static/
+
+# Unit test / coverage reports
+.coverage
+*.cover
+htmlcov/
+.coverage.*
+
+# Environment variables
+*.env
+*.secret
+*.key
+
+# IDE / Editor junk
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS / Linux
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Migrations (optional – keep if you want history in git)
+# */migrations/
+# !*/migrations/__init__.py
+
+# Node (if you use frontend tooling)
+node_modules/
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+
