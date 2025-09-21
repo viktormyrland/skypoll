@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from polls.views import create_poll, poll_detail, home_redirect, vote
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('ny/', create_poll, name="create_poll"),
+    path('<slug:slug>/', poll_detail, name="poll_detail"),
+    path('', home_redirect),
+    path("vote/<slug:slug>/", vote, name="vote"),
 ]

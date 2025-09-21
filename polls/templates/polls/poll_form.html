@@ -1,0 +1,12 @@
+{# polls/templates/polls/poll_form.html #}
+{% load static %}
+<link rel="stylesheet" href="{% static 'main.css' %}">
+
+<h1>Ny SkyPoll</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>
+

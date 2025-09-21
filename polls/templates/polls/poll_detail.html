@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}My Site{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+<link rel="stylesheet" href="{% static 'main.css' %}">
+
+
+<div id="content">
+<h1>{{ poll.title }}</h1>
+<p>Hoppleder: {{ poll.dz_leader }}</p>
+
+<form action="{% url 'vote' poll.slug %}" method="post">
+  {% csrf_token %}
+<table>
+  <thead>
+    <tr>
+      <th>Navn</th>
+      {% for day in days %}
+      <th>{{ day.day|date:"M j"}}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+      {% if edit_ballot and row.ballot.id == edit_ballot.id %}
+        <tr id="edit_ballot_form" class="hidden">
+            <td>
+              <input id="nickname" type="text" name="nickname" required maxlength="80" placeholder="Navn & lisens"
+                     value="{{ nickname }}">
+            </td>
+            {% for day,cur in edit_pairs %}
+                <td>
+                  <input type="hidden" name="day_{{ day.id }}" id="day_{{ day.id }}" value="{{ cur|default:-1 }}">
+                  <button
+                    type="button"
+                    class="toggle"
+                    data-target="day_{{ day.id }}"
+                    data-value="{{ cur|default:-1 }}"
+                    aria-pressed="{{ cur|default:0|yesno:'true,false' }}"
+                    aria-label="Toggle availability for {{ day.day|date:'M j' }}">
+                    {% if cur == 2 %}✅{% elif cur == 1 %}❓{% elif status == 0 %}❌{% endif %}
+                  </button>
+                </td>
+            {% endfor %}
+          </tr>
+      {% endif %} 
+      <tr {% if edit_ballot and row.ballot.id == edit_ballot.id %}id="own_ballot_row"{% endif %}>
+        <td>{{ row.ballot.nickname }} {% if edit_ballot and row.ballot.id == edit_ballot.id %}<button type="button" id="edit_ballot_button">Rediger</button>{% endif %}</td>
+        {% for status in row.statuses %}
+        <td>{% if status == 2 %}✅{% elif status == 1 %}❓{% elif status == 0 %}❌{% else %} {% endif %}</td>
+        {% endfor %}
+  
+    </tr>
+    {% endfor %}
+
+    {% if not edit_ballot %}
+    <tr>
+        <td><input id="nickname" type="text" name="nickname" required maxlength="80" placeholder="Navn og lisens"></td>
+          {% for day in days %}
+          <td>
+            <input type="hidden" name="day_{{ day.id }}" id="day_{{ day.id }}" value="-1">
+            <button
+              type="button"
+              class="toggle"
+              data-target="day_{{ day.id }}"
+              data-value="-1"
+              aria-pressed="false"
+              aria-label="Toggle availability for {{ day.day|date:'M j' }}">
+              
+            </button>
+          </td>
+        {% endfor %} 
+    </tr>
+      {% endif %}
+  </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="{{ days|length|add:1 }}">
+          <button type="submit" id="form_submit_button" {% if edit_ballot %}class="hidden" {% endif%}>Send</button>
+        </td>
+      </tr>
+    </tfoot>
+</table>
+</form>
+</div>
+<style>
+  .hidden {
+    display:none;
+  }
+
+  tbody button{
+    min-width: 42px;
+    min-height: 36px;
+  }
+
+  body {
+    background-color: #111827;
+    color: white;
+    font-family: "Roboto";
+  }
+
+  #content {
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+    background-color: #1f2937;
+    border-radius: 10px;
+    padding: 10px 20px;
+    border: 2px solid #555
+  }
+
+
+  #content td{
+    padding: 3px;
+    text-align: center;
+  }
+
+  #content td:first-child{
+    text-align: left;
+  }
+
+  #content td{
+    margin: 0;
+    border-top: 1px solid #777;  
+  }
+
+</style>
+
+<script>
+  (function () {
+    const cycle = ["2","1","0"];      // YES=2, MAYBE=1, NO=0
+    const icon  = { "2":"✅", "1":"❓", "0":"❌" };
+
+    document.addEventListener("click", function (e) {
+      const btn = e.target.closest("button.toggle");
+      if (!btn) return;
+
+      const hiddenId = btn.dataset.target;
+      const input = document.getElementById(hiddenId);
+      if (!input) return;
+
+      // advance value
+      const cur = btn.dataset.value || "0";
+      const next = cycle[(cycle.indexOf(cur) + 1) % cycle.length];
+
+      // update UI + hidden input
+      btn.dataset.value = next;
+      btn.textContent = icon[next];
+      input.value = next;
+
+      // accessibility hint
+      btn.setAttribute("aria-pressed", next !== "0"); // pressed for yes/maybe
+    });
+
+    document.getElementById('edit_ballot_button').addEventListener("click", function (e) {
+      var editable_form = document.getElementById("edit_ballot_form");
+      var own_ballot_row = document.getElementById("own_ballot_row");
+      var form_submit_button = document.getElementById("form_submit_button");
+      form_submit_button.classList.remove("hidden");
+      editable_form.classList.remove("hidden");
+      own_ballot_row.classList.add("hidden");
+
+    })
+
+    // Optional: keyboard support with space/enter
+    document.addEventListener("keydown", function (e) {
+      const btn = e.target.closest("button.toggle");
+      if (!btn) return;
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
