@@ -13,20 +13,22 @@ def create_poll(request):
         if form.is_valid():
             poll = form.save()
             return redirect("poll_detail", slug=poll.slug)
-
     else:
         form = PollForm()
     return render(request, "polls/poll_form.html", {"form": form})
 
 
 def poll_detail(request, slug):
-
     poll = get_object_or_404(Poll.objects.prefetch_related("days"), slug=slug)
     days = list(poll.days.all().order_by("day"))
+
     ballots = (
-        poll.ballots.prefetch_related(Prefetch(
-            "availabilities",
-            queryset=Availability.objects.select_related("day")))
+        poll.ballots.prefetch_related(
+            Prefetch(
+                "availabilities",
+                queryset=Availability.objects.select_related("day"),
+            )
+        )
     ).order_by("submitted_at")
 
     for b in ballots:
@@ -39,23 +41,35 @@ def poll_detail(request, slug):
             "statuses": [b.av_by_day.get(d.id) for d in days],
         })
 
+    # Tally: count YES votes per day across all ballots (for the JS serverTally)
+    tally = {
+        d.id: sum(
+            1 for b in ballots
+            if b.av_by_day.get(d.id) == VoteChoice.YES
+        )
+        for d in days
+    }
+
     user_cookie = request.COOKIES.get("skypoll_user_id") or generate_slug()
 
     edit_ballot = Ballot.objects.filter(
-        poll=poll, user_cookie=user_cookie).first()
+        poll=poll, user_cookie=user_cookie
+    ).first()
+
     edit_statuses = {}
     nickname = ""
-    edit_pairs = None  # <- list of (day, status) for the edit rowk
+    edit_pairs = None
 
     if edit_ballot:
         nickname = edit_ballot.nickname
         avs = Availability.objects.filter(
-            ballot=edit_ballot).values_list("day_id", "status")
+            ballot=edit_ballot
+        ).values_list("day_id", "status")
         edit_statuses = {day_id: status for day_id, status in avs}
 
-        edit_pairs = [(d, edit_statuses.get(d.id, 0))
-                      for d in days]  # default 0 (No)
-        print(edit_statuses)
+        # Use None (renders as -1 / unanswered) for days with no saved vote,
+        # so the toggle button starts blank rather than defaulting to No.
+        edit_pairs = [(d, edit_statuses.get(d.id)) for d in days]
 
     context = {
         "poll": poll,
@@ -66,6 +80,7 @@ def poll_detail(request, slug):
         "edit_statuses": edit_statuses,
         "edit_pairs": edit_pairs,
         "nickname": nickname,
+        "tally": tally,
     }
 
     response = render(request, "polls/poll_detail.html", context)
@@ -74,10 +89,9 @@ def poll_detail(request, slug):
         response.set_cookie(
             "skypoll_user_id",
             user_cookie,
-            max_age=60*60*24*365,
+            max_age=60 * 60 * 24 * 365,
             httponly=True,
-            samesite="Lax"
-
+            samesite="Lax",
         )
     return response
 
@@ -103,8 +117,7 @@ def vote(request: HttpRequest, slug: str) -> HttpResponse:
     user_cookie = request.COOKIES.get("skypoll_user_id") or generate_slug()
     nickname = (request.POST.get("nickname") or "").strip()[:80]
 
-    print(request.POST)
-    # Collect statuses from POST: day_<id> -> 0/1/2
+    # Collect statuses from POST: day_<id> -> 0/1/2; skip -1 (unanswered)
     statuses = {}
     for d in days:
         raw = request.POST.get(f"day_{d.id}", "-1")
@@ -113,10 +126,8 @@ def vote(request: HttpRequest, slug: str) -> HttpResponse:
             if v == -1:
                 continue
             if v not in (VoteChoice.NO, VoteChoice.MAYBE, VoteChoice.YES):
-                # v = VoteChoice.NO
                 continue
         except ValueError:
-            # v = VoteChoice.NO
             continue
         statuses[d.id] = v
 
@@ -132,15 +143,16 @@ def vote(request: HttpRequest, slug: str) -> HttpResponse:
 
         # Rewrite availabilities (simple & reliable)
         Availability.objects.filter(ballot=ballot).delete()
-        Availability.objects.bulk_create(
-            [
-                Availability(ballot=ballot, day_id=d, status=statuses[d])
-                for d in statuses
-            ]
-        )
+        Availability.objects.bulk_create([
+            Availability(ballot=ballot, day_id=d, status=statuses[d])
+            for d in statuses
+        ])
 
     resp = redirect("poll_detail", slug=poll.slug)
-    # Ensure cookie persists for future edits
-    resp.set_cookie("skypoll_user_id", user_cookie,
-                    max_age=60 * 60 * 24 * 365, samesite="Lax")
+    resp.set_cookie(
+        "skypoll_user_id",
+        user_cookie,
+        max_age=60 * 60 * 24 * 365,
+        samesite="Lax",
+    )
     return resp
