@@ -10,11 +10,11 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background-color: #111827;
-      color: #f9fafb;
+      background-color: #0d1117;
+      color: #f0f6fc;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
-      padding: 20px 16px 40px;
+      padding: 24px 16px 48px;
     }
 
     .page-wrap {
@@ -23,49 +23,50 @@
     }
 
     /* ── Header ── */
-    .page-header { margin-bottom: 20px; }
+    .page-header { margin-bottom: 24px; }
     .page-header h1 {
-      font-size: 20px;
-      font-weight: 500;
-      color: #f9fafb;
-      margin-bottom: 4px;
+      font-size: 24px;
+      font-weight: 600;
+      color: #f0f6fc;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
-    .page-header p { font-size: 13px; color: #9ca3af; }
+    .page-header p { font-size: 15px; color: #c9d1d9; }
 
     /* ── Legend ── */
     .legend {
       display: flex;
-      gap: 14px;
-      margin-bottom: 16px;
+      gap: 16px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: 12px;
-      color: #9ca3af;
+      gap: 7px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #c9d1d9;
     }
     .legend-dot {
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 15px;
     }
-    .legend-dot.yes    { background: #EAF3DE; color: #3B6D11; }
-    .legend-dot.maybe  { background: #FAEEDA; color: #854F0B; }
-    .legend-dot.no     { background: #FCEBEB; color: #A32D2D; }
+    .legend-dot.yes   { background: #1a4731; color: #4ade80; border: 1px solid #166534; }
+    .legend-dot.maybe { background: #431a00; color: #fb923c; border: 1px solid #7c2d12; }
+    .legend-dot.no    { background: #3b0a0a; color: #f87171; border: 1px solid #7f1d1d; }
 
     /* ── Card ── */
     .card {
-      background-color: #1f2937;
-      border: 0.5px solid #374151;
+      background-color: #161b22;
+      border: 1px solid #30363d;
       border-radius: 12px;
       overflow: hidden;
     }
@@ -74,26 +75,26 @@
     .col-header {
       display: flex;
       align-items: center;
-      padding: 8px 14px 7px;
-      background: #111827;
-      border-bottom: 0.5px solid #374151;
-      gap: 8px;
+      padding: 10px 16px;
+      background: #0d1117;
+      border-bottom: 1px solid #30363d;
+      gap: 10px;
     }
     .col-header-name {
       flex: 1;
-      font-size: 10px;
-      font-weight: 600;
-      color: #6b7280;
+      font-size: 12px;
+      font-weight: 700;
+      color: #8b949e;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
     .col-header-days { display: flex; gap: 6px; }
     .col-header-day {
-      width: 38px;
+      width: 44px;
       text-align: center;
-      font-size: 10px;
-      font-weight: 600;
-      color: #6b7280;
+      font-size: 12px;
+      font-weight: 700;
+      color: #c9d1d9;
       text-transform: uppercase;
       letter-spacing: 0.03em;
       white-space: nowrap;
@@ -103,152 +104,166 @@
     .ballot-row {
       display: flex;
       align-items: center;
-      padding: 9px 14px;
-      border-bottom: 0.5px solid #374151;
-      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid #21262d;
+      gap: 10px;
     }
     .ballot-row:last-child { border-bottom: none; }
-    .ballot-row.is-own { background: #1a2535; }
+    .ballot-row.is-own {
+      background: #0d1f38;
+      border-left: 3px solid #1d6fdb;
+    }
 
     .ballot-name {
       flex: 1;
-      font-size: 14px;
-      color: #f9fafb;
+      font-size: 16px;
+      font-weight: 500;
+      color: #f0f6fc;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .ballot-name-input {
+
+    /* ── Name input — clearly visible box ── */
+    .name-input-wrap {
       flex: 1;
-      font-size: 14px;
-      color: #f9fafb;
-      background: transparent;
-      border: none;
-      outline: none;
-      font-family: inherit;
       min-width: 0;
     }
-    .ballot-name-input::placeholder { color: #6b7280; font-style: italic; }
-    .ballot-name-input:focus { border-bottom: 1px solid #4b5563; }
+    .ballot-name-input {
+      width: 100%;
+      font-size: 15px;
+      font-weight: 500;
+      color: #f0f6fc;
+      background: #0d1117;
+      border: 2px solid #388bfd;
+      border-radius: 8px;
+      outline: none;
+      font-family: inherit;
+      padding: 9px 12px;
+    }
+    .ballot-name-input::placeholder { color: #6e7681; font-style: normal; }
+    .ballot-name-input:focus {
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.25);
+    }
 
     /* ── Day cells ── */
     .days-row { display: flex; gap: 6px; flex-shrink: 0; }
 
     /* static display (other people's votes) */
     .static-vote {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 19px;
     }
-    .static-vote.yes   { background: #EAF3DE; color: #3B6D11; }
-    .static-vote.maybe { background: #FAEEDA; color: #854F0B; }
-    .static-vote.no    { background: #FCEBEB; color: #A32D2D; }
-    .static-vote.empty {
-      background: #374151;
-      color: #6b7280;
-      border: 0.5px solid #4b5563;
-    }
+    .static-vote.yes   { background: #1a4731; color: #4ade80; border: 1px solid #166534; }
+    .static-vote.maybe { background: #431a00; color: #fb923c; border: 1px solid #7c2d12; }
+    .static-vote.no    { background: #3b0a0a; color: #f87171; border: 1px solid #7f1d1d; }
+    .static-vote.empty { background: #21262d; color: #484f58; border: 1px solid #30363d; }
 
     /* toggleable buttons */
     .vote-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      border: 0.5px solid #4b5563;
-      background: #374151;
-      color: #6b7280;
+      width: 44px;
+      height: 44px;
+      border-radius: 9px;
+      border: 1.5px solid #30363d;
+      background: #21262d;
+      color: #6e7681;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 19px;
       transition: transform 0.1s;
       touch-action: manipulation;
     }
-    .vote-btn:active { transform: scale(0.92); }
-    .vote-btn[data-value="2"] { background: #EAF3DE; border-color: #3B6D11; color: #3B6D11; }
-    .vote-btn[data-value="1"] { background: #FAEEDA; border-color: #854F0B; color: #854F0B; }
-    .vote-btn[data-value="0"] { background: #FCEBEB; border-color: #A32D2D; color: #A32D2D; }
+    .vote-btn:active { transform: scale(0.90); }
+    .vote-btn[data-value="2"] { background: #1a4731; border-color: #166534; color: #4ade80; }
+    .vote-btn[data-value="1"] { background: #431a00; border-color: #7c2d12; color: #fb923c; }
+    .vote-btn[data-value="0"] { background: #3b0a0a; border-color: #7f1d1d; color: #f87171; }
 
     /* ── Edit button ── */
     .edit-btn {
-      font-size: 12px;
-      color: #60a5fa;
+      font-size: 13px;
+      font-weight: 500;
+      color: #58a6ff;
       background: none;
-      border: none;
+      border: 1px solid #1d6fdb;
       cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 6px;
+      padding: 6px 11px;
+      border-radius: 7px;
       font-family: inherit;
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 5px;
       flex-shrink: 0;
       white-space: nowrap;
     }
-    .edit-btn:hover { background: rgba(96, 165, 250, 0.12); }
+    .edit-btn:hover { background: rgba(88, 166, 255, 0.12); }
 
     /* ── Tally row ── */
     .tally-row {
       display: flex;
       align-items: center;
-      padding: 8px 14px;
-      background: #111827;
-      border-top: 0.5px solid #374151;
-      gap: 8px;
+      padding: 10px 16px;
+      background: #0d1117;
+      border-top: 1px solid #30363d;
+      gap: 10px;
     }
     .tally-label {
       flex: 1;
-      font-size: 10px;
-      font-weight: 600;
-      color: #6b7280;
+      font-size: 12px;
+      font-weight: 700;
+      color: #8b949e;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
     .tally-days { display: flex; gap: 6px; }
     .tally-num {
-      width: 38px;
+      width: 44px;
       text-align: center;
-      font-size: 13px;
-      font-weight: 500;
-      color: #9ca3af;
+      font-size: 16px;
+      font-weight: 700;
+      color: #6e7681;
     }
-    .tally-num.has-votes { color: #34d399; }
+    .tally-num.has-votes { color: #4ade80; }
 
     /* ── Submit bar ── */
-    .submit-bar { padding: 12px 14px; }
+    .submit-bar { padding: 14px 16px; }
     .submit-btn {
       width: 100%;
-      padding: 12px;
-      background: #1D9E75;
-      color: white;
+      padding: 14px;
+      background: #1f6feb;
+      color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 500;
+      border-radius: 9px;
+      font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
       font-family: inherit;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: opacity 0.15s, transform 0.1s;
+      gap: 9px;
+      transition: background 0.15s, transform 0.1s;
     }
-    .submit-btn:hover { opacity: 0.9; }
+    .submit-btn:hover { background: #388bfd; }
     .submit-btn:active { transform: scale(0.98); }
 
     /* ── Misc ── */
     .hidden { display: none !important; }
 
     @media (max-width: 400px) {
-      .col-header-day, .tally-num { width: 34px; font-size: 9px; }
-      .static-vote, .vote-btn { width: 34px; height: 34px; font-size: 14px; }
+      .col-header-day { width: 38px; font-size: 11px; }
+      .static-vote, .vote-btn { width: 38px; height: 38px; font-size: 16px; }
+      .tally-num { width: 38px; font-size: 14px; }
       .days-row, .col-header-days, .tally-days { gap: 4px; }
+      .ballot-row { padding: 10px 12px; }
     }
   </style>
 </head>
@@ -257,7 +272,7 @@
 
   <div class="page-header">
     <h1>
-      <i class="ti ti-parachute" aria-hidden="true" style="font-size:22px"></i>
+      <i class="ti ti-parachute" aria-hidden="true" style="font-size:26px"></i>
       {{ poll.title }}
     </h1>
     <p>Hoppleder: {{ poll.dz_leader }}</p>
@@ -296,16 +311,18 @@
         {# ── Inline edit row (hidden by default, shown when user clicks Rediger) ── #}
         {% if edit_ballot and row.ballot.id == edit_ballot.id %}
         <div class="ballot-row is-own hidden" id="edit_ballot_form">
-          <input
-            class="ballot-name-input"
-            type="text"
-            name="nickname"
-            required
-            maxlength="80"
-            placeholder="Navn og lisens"
-            value="{{ nickname }}"
-            aria-label="Ditt navn og lisensnummer"
-          >
+          <div class="name-input-wrap">
+            <input
+              class="ballot-name-input"
+              type="text"
+              name="nickname"
+              required
+              maxlength="80"
+              placeholder="Navn og lisens"
+              value="{{ nickname }}"
+              aria-label="Ditt navn og lisensnummer"
+            >
+          </div>
           <div class="days-row">
             {% for day, cur in edit_pairs %}
             <input type="hidden" name="day_{{ day.id }}" id="day_{{ day.id }}" value="{{ cur|default:-1 }}">
@@ -351,16 +368,18 @@
       {# ── New ballot entry row (shown when user hasn't voted yet) ── #}
       {% if not edit_ballot %}
       <div class="ballot-row" id="new-entry-row">
-        <input
-          class="ballot-name-input"
-          type="text"
-          name="nickname"
-          id="nickname"
-          required
-          maxlength="80"
-          placeholder="Navn og lisens"
-          aria-label="Ditt navn og lisensnummer"
-        >
+        <div class="name-input-wrap">
+          <input
+            class="ballot-name-input"
+            type="text"
+            name="nickname"
+            id="nickname"
+            required
+            maxlength="80"
+            placeholder="Navn og lisens"
+            aria-label="Ditt navn og lisensnummer"
+          >
+        </div>
         <div class="days-row">
           {% for day in days %}
           <input type="hidden" name="day_{{ day.id }}" id="day_{{ day.id }}" value="-1">
@@ -459,12 +478,10 @@
 
   // ── Client-side tally (adds unsaved new-entry votes on top of server counts)
   function updateTally() {
-    // collect current toggle values from whichever entry row is active
     const activeToggles = document.querySelectorAll("button.vote-btn");
-    // map day_id → delta (1 if yes, else 0)
     const deltas = {};
     activeToggles.forEach(function (btn) {
-      const target = btn.dataset.target;         // "day_123"
+      const target = btn.dataset.target;
       const dayId  = target.replace("day_", "");
       deltas[dayId] = (btn.dataset.value === "2") ? 1 : 0;
     });
@@ -483,7 +500,8 @@
     const nameInput = document.getElementById("nickname");
     if (nameInput && !nameInput.value.trim()) {
       e.preventDefault();
-      nameInput.style.borderBottom = "2px solid #E24B4A";
+      nameInput.style.borderColor = "#f87171";
+      nameInput.style.boxShadow   = "0 0 0 3px rgba(248, 113, 113, 0.25)";
       nameInput.focus();
     }
   });
