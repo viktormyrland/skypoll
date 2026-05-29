@@ -477,17 +477,18 @@
   }
 
   // ── Client-side tally (adds unsaved new-entry votes on top of server counts)
+  
   function updateTally() {
-    const activeToggles = document.querySelectorAll("button.vote-btn");
+    const newEntryRow = document.getElementById("new-entry-row");
     const deltas = {};
-    activeToggles.forEach(function (btn) {
-      const target = btn.dataset.target;
-      const dayId  = target.replace("day_", "");
-      deltas[dayId] = (btn.dataset.value === "2") ? 1 : 0;
-    });
-
+    if (newEntryRow) {
+      newEntryRow.querySelectorAll("button.vote-btn").forEach(function (btn) {
+        const dayId = btn.dataset.target.replace("day_", "");
+        deltas[dayId] = (btn.dataset.value === "2") ? 1 : 0;
+      });
+    }
     Object.entries(serverTally).forEach(function ([dayId, base]) {
-      const cell  = document.getElementById("tally-" + dayId);
+      const cell = document.getElementById("tally-" + dayId);
       if (!cell) return;
       const total = base + (deltas[dayId] ?? 0);
       cell.textContent = total;
