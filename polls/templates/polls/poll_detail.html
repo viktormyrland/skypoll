@@ -347,6 +347,12 @@
         >
           <span class="ballot-name">{{ row.ballot.nickname }}</span>
 
+          {% if edit_ballot and row.ballot.id == edit_ballot.id %}
+          <button type="button" class="edit-btn" id="edit_ballot_button" aria-label="Rediger ditt svar">
+            <i class="ti ti-edit" aria-hidden="true"></i> Rediger
+          </button>
+          {% endif %}
+          
           <div class="days-row">
             {% for status in row.statuses %}
             <div class="static-vote {% if status == 2 %}yes{% elif status == 1 %}maybe{% elif status == 0 %}no{% else %}empty{% endif %}"
@@ -356,11 +362,6 @@
             {% endfor %}
           </div>
 
-          {% if edit_ballot and row.ballot.id == edit_ballot.id %}
-          <button type="button" class="edit-btn" id="edit_ballot_button" aria-label="Rediger ditt svar">
-            <i class="ti ti-edit" aria-hidden="true"></i> Rediger
-          </button>
-          {% endif %}
         </div>
 
       {% endfor %}
